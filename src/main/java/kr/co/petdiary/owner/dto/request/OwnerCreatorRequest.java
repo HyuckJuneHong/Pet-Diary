@@ -12,19 +12,19 @@ import lombok.*;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OwnerCreatorRequest {
-    @NotBlank
+    @NotBlank(message = "이름을 입력하세요.")
     private String name;
 
-    @Email
+    @Email(message = "이메일을 형식에 맞게 입력하세요.")
     private String email;
 
-    @NotBlank
+    @NotBlank(message = "비밀번호를 입력하세요.")
     private String password;
 
-    @NotBlank
+    @NotBlank(message = "확인 비밀번호를 입력하세요.")
     private String checkPassword;
 
-    @Pattern(regexp = Regexp.PHONE_PATTERN)
+    @Pattern(regexp = Regexp.PHONE_PATTERN, message = "전화번호를 형식에 맞게 입력하세요.")
     private String cellPhone;
 
     public Owner toEntity() {

@@ -1,7 +1,10 @@
 package kr.co.petdiary.owner.model;
 
 import kr.co.petdiary.owner.dto.request.OwnerCreatorRequest;
+import kr.co.petdiary.owner.dto.response.OwnerCreatorResponse;
 import kr.co.petdiary.owner.entity.Owner;
+
+import java.time.LocalDateTime;
 
 public class OwnerDtoCreators {
     public static OwnerCreatorRequest ownerCreatorRequest() {
@@ -31,6 +34,24 @@ public class OwnerDtoCreators {
                 .password(owner.getPassword())
                 .checkPassword(owner.getPassword())
                 .cellPhone(owner.getCellPhone())
+                .build();
+    }
+
+    public static OwnerCreatorRequest invalidOwnerCreatorRequest() {
+        return OwnerCreatorRequest.builder()
+                .email("@naver.com")
+                .name(" ")
+                .password(" ")
+                .cellPhone("010-1-1")
+                .checkPassword(" ")
+                .build();
+    }
+
+    public static OwnerCreatorResponse OwnerCreatorResponse(OwnerCreatorRequest request) {
+        return OwnerCreatorResponse.builder()
+                .ownerId(1L)
+                .createAt(LocalDateTime.now())
+                .name(request.getName())
                 .build();
     }
 }
