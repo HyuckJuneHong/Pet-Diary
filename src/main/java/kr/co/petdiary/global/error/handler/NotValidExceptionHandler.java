@@ -32,7 +32,7 @@ public class NotValidExceptionHandler {
                 .toList();
         return ErrorResponse.builder()
                 .message(ErrorResult.INVALID_PARAMETER.getMessage())
-                .httpStatus(ErrorResult.INVALID_PARAMETER.getHttpStatus())
+                .status(ErrorResult.INVALID_PARAMETER.getHttpStatus())
                 .validationExceptions(exceptions)
                 .build();
     }

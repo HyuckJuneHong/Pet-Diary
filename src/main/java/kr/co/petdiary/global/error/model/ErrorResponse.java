@@ -8,9 +8,8 @@ import org.springframework.validation.FieldError;
 import java.util.List;
 
 @Builder
-public record ErrorResponse(String exception,
-                            String message,
-                            HttpStatus httpStatus,
+public record ErrorResponse(String message,
+                            HttpStatus status,
                             @JsonInclude(JsonInclude.Include.NON_EMPTY)
                             List<ValidationException> validationExceptions) {
     @Builder
