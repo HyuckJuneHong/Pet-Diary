@@ -1,12 +1,10 @@
 package kr.co.petdiary.owner.entity;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.Pattern;
 import kr.co.petdiary.global.common.BaseEntity;
+import kr.co.petdiary.owner.model.CellPhone;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -28,12 +26,12 @@ public class Owner extends BaseEntity {
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$")
-    @Column(name = "cell_phone", length = 20, nullable = false, unique = true)
-    private String cellPhone;
+    @Valid
+    @Embedded
+    private CellPhone cellPhone = new CellPhone();
 
     @Builder
-    private Owner(String email, String password, String name, String cellPhone) {
+    private Owner(String email, String password, String name, CellPhone cellPhone) {
         this.email = email;
         this.password = password;
         this.name = name;
