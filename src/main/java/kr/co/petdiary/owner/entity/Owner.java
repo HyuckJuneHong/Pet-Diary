@@ -7,6 +7,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import kr.co.petdiary.global.common.BaseEntity;
+import kr.co.petdiary.global.common.Regexp;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -18,8 +19,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AttributeOverride(name = "id", column = @Column(name = "owner_id", length = 4))
 public class Owner extends BaseEntity {
-    private static final String PHONE_PATTERN = "^\\d{3}-\\d{4}-\\d{4}$";
-
     @Email
     @Column(name = "email", length = 30, nullable = false, unique = true)
     private String email;
@@ -30,7 +29,7 @@ public class Owner extends BaseEntity {
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-    @Pattern(regexp = PHONE_PATTERN)
+    @Pattern(regexp = Regexp.PHONE_PATTERN)
     @Column(name = "cell_phone", length = 20, nullable = false, unique = true)
     private String cellPhone;
 

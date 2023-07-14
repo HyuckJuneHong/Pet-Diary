@@ -21,7 +21,7 @@ class OwnerTest {
     private TestEntityManager testEntityManager;
 
     @ParameterizedTest
-    @CsvSource(value = {"010-12-5678", "01012345678", "0"})
+    @CsvSource(value = {"010-12-5678", "01012345678", "0", "\\ "})
     void 전화번호_형식이_맞지_않음(String cellPhone) {
         //given
         final Owner actual = OwnerCreators.createOwnerByCellPhone(cellPhone);
@@ -32,7 +32,7 @@ class OwnerTest {
     }
 
     @ParameterizedTest
-    @CsvSource(value = {"exampenaver.com", "@naver.com", "example@"})
+    @CsvSource(value = {"exampenaver.com", "@naver.com", "example@", "\\ "})
     void 이메일_형식이_맞지_않음(String email) {
         //given
         final Owner actual = OwnerCreators.createOwnerByEmail(email);

@@ -5,7 +5,7 @@ import kr.co.petdiary.owner.entity.Owner;
 public class OwnerCreators {
     public static Owner createOwner() {
         return Owner.builder()
-                .email("example@naver.com")
+                .email("testEmail@naver.com")
                 .name("testName")
                 .password("testPassword")
                 .cellPhone("010-1233-1233")
@@ -14,7 +14,7 @@ public class OwnerCreators {
 
     public static Owner createOwnerByCellPhone(String cellPhone) {
         return Owner.builder()
-                .email("example@naver.com")
+                .email("testEmail@naver.com")
                 .name("testName")
                 .password("testPassword")
                 .cellPhone(cellPhone)
