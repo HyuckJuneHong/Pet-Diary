@@ -28,7 +28,7 @@ public class Owner extends BaseEntity {
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
-    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$", message = "잘못된 전화번호 형식입니다.")
+    @Pattern(regexp = "^\\d{3}-\\d{4}-\\d{4}$")
     @Column(name = "cell_phone", length = 20, nullable = false, unique = true)
     private String cellPhone;
 
