@@ -22,10 +22,10 @@ public abstract class BaseEntity {
     protected Long id;
 
     @CreatedDate
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", length = 20, nullable = false, updatable = false)
     protected LocalDateTime createdAt;
 
     @LastModifiedDate
-    @Column(name = "modified_at")
+    @Column(name = "modified_at", length = 20)
     protected LocalDateTime modifiedAt;
 }
