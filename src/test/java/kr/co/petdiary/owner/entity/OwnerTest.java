@@ -16,10 +16,10 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 @DataJpaTest
 @ActiveProfiles("test")
 @Import(JpaConfig.class)
-public class OwnerTest {
+class OwnerTest {
     @Autowired
     private TestEntityManager testEntityManager;
-    
+
     @ParameterizedTest
     @CsvSource(value = {"010-12-5678", "01012345678", "0"})
     void 전화번호_형식이_맞지_않음(String cellPhone) {

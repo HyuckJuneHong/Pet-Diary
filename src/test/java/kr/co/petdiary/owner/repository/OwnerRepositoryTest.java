@@ -26,7 +26,7 @@ class OwnerRepositoryTest {
     @Test
     void 반려인을_등록() {
         //given
-        final Owner saveOwner = OwnerCreators.createOwnerByCellPhone("010-1111-1111");
+        final Owner saveOwner = OwnerCreators.createOwner();
 
         //when
         final Owner actual = ownerRepository.save(saveOwner);
