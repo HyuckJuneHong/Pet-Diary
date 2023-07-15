@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class OwnerService {
     private final OwnerRepository ownerRepository;
 
+    @Transactional
     public OwnerCreatorResponse createOwner(OwnerCreatorRequest request) {
         isEmail(request.getEmail());
         validatePasswordMatch(request.getPassword(), request.getCheckPassword());

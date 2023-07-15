@@ -3,13 +3,13 @@ package kr.co.petdiary.global.config;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
+import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@Configuration
+@TestConfiguration
 @EnableJpaAuditing
-public class JpaConfig {
+public class JPATestConfig {
     @PersistenceContext
     private EntityManager entityManager;
 
