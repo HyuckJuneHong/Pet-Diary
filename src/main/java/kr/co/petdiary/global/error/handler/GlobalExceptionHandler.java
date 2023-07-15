@@ -4,8 +4,8 @@ import kr.co.petdiary.global.error.exception.DuplicatedException;
 import kr.co.petdiary.global.error.exception.EntityNotFoundException;
 import kr.co.petdiary.global.error.exception.PasswordInvalidException;
 import kr.co.petdiary.global.error.model.ErrorResponse;
+import kr.co.petdiary.global.error.model.ErrorResult;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -17,34 +17,31 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(EntityNotFoundException.class)
     protected ResponseEntity<ErrorResponse> handleNotFoundException(EntityNotFoundException e) {
         log.warn("======= Handle EntityNotFoundException =======", e);
-        ErrorResponse errorResponse = makeResponseErrorFormat(e.getMessage(), e.getStatus());
-        return handleExceptionInternal(errorResponse);
+        return handleExceptionInternal(e.getErrorResult());
     }
 
     @ExceptionHandler(DuplicatedException.class)
     protected ResponseEntity<ErrorResponse> handleDuplicatedException(DuplicatedException e) {
         log.warn("======= Handle DuplicatedException =======", e);
-        ErrorResponse errorResponse = makeResponseErrorFormat(e.getMessage(), e.getStatus());
-        return handleExceptionInternal(errorResponse);
+        return handleExceptionInternal(e.getErrorResult());
     }
 
     @ExceptionHandler(PasswordInvalidException.class)
     protected ResponseEntity<ErrorResponse> handlePasswordInvalidException(PasswordInvalidException e) {
         log.warn("======= Handle PasswordInvalidException =======", e);
-        ErrorResponse errorResponse = makeResponseErrorFormat(e.getMessage(), e.getStatus());
-        return handleExceptionInternal(errorResponse);
+        return handleExceptionInternal(e.getErrorResult());
     }
 
-    private ResponseEntity<ErrorResponse> handleExceptionInternal(ErrorResponse errorResponse) {
+    private ResponseEntity<ErrorResponse> handleExceptionInternal(ErrorResult errorResult) {
         return ResponseEntity
-                .status(errorResponse.status())
-                .body(errorResponse);
+                .status(errorResult.getHttpStatus())
+                .body(makeResponseErrorFormat(errorResult));
     }
 
-    private ErrorResponse makeResponseErrorFormat(String message, HttpStatus status) {
+    private ErrorResponse makeResponseErrorFormat(ErrorResult errorResult) {
         return ErrorResponse.builder()
-                .message(message)
-                .status(status)
+                .message(errorResult.getMessage())
+                .status(errorResult.getHttpStatus())
                 .build();
     }
 }
