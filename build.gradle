@@ -60,6 +60,16 @@ dependencies {
     //mysql
     runtimeOnly 'com.mysql:mysql-connector-j'
 
+    //security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    testImplementation 'org.springframework.security:spring-security-test'
+
+    //oauth2
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
+
+    // jwt
+    implementation 'com.auth0:java-jwt:4.4.0'
+
     //assertj
     testImplementation 'org.assertj:assertj-core:3.24.2'
 

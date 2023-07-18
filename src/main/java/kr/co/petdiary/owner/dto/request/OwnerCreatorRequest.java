@@ -27,7 +27,7 @@ public class OwnerCreatorRequest {
     @Pattern(regexp = Regexp.PHONE_PATTERN, message = "전화번호를 형식에 맞게 입력하세요.")
     private String cellPhone;
 
-    public Owner toEntity() {
+    public Owner toOwner() {
         return Owner.builder()
                 .email(this.email)
                 .name(this.name)

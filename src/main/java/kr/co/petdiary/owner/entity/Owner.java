@@ -1,17 +1,19 @@
 package kr.co.petdiary.owner.entity;
 
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import kr.co.petdiary.global.common.BaseEntity;
 import kr.co.petdiary.global.common.Regexp;
+import kr.co.petdiary.global.error.exception.PasswordInvalidException;
+import kr.co.petdiary.global.error.model.ErrorResult;
+import kr.co.petdiary.owner.model.LoginType;
+import kr.co.petdiary.owner.model.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Getter
 @Entity
@@ -33,11 +35,51 @@ public class Owner extends BaseEntity {
     @Column(name = "cell_phone", length = 20, nullable = false, unique = true)
     private String cellPhone;
 
+    @Column(name = "social_id")
+    private String socialId;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "login_type", length = 10)
+    private LoginType loginType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", length = 10, nullable = false)
+    private Role role;
+
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
     @Builder
-    private Owner(String email, String password, String name, String cellPhone) {
+    private Owner(String email, String password, String name, String cellPhone, String socialId, LoginType loginType,
+                  Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.cellPhone = cellPhone;
+        this.socialId = socialId;
+        this.loginType = loginType;
+        this.role = role;
+    }
+
+    public String getRoleKey() {
+        return this.role.getKey();
+    }
+
+    public void authorizeOwner() {
+        this.role = Role.USER;
+    }
+
+    public void updateRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+    }
+
+    public void encodePassword(PasswordEncoder passwordEncoder) {
+        this.password = passwordEncoder.encode(this.password);
+    }
+
+    public void validateEncodePasswordMatch(String password, PasswordEncoder passwordEncoder) {
+        if (!passwordEncoder.matches(password, this.password)) {
+            throw new PasswordInvalidException(ErrorResult.INVALID_PASSWORD);
+        }
     }
 }

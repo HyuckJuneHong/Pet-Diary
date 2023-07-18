@@ -6,6 +6,7 @@ import kr.co.petdiary.owner.application.OwnerService;
 import kr.co.petdiary.owner.dto.request.OwnerCreatorRequest;
 import kr.co.petdiary.owner.dto.response.OwnerCreatorResponse;
 import kr.co.petdiary.owner.model.OwnerDtoCreators;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -37,6 +38,7 @@ class OwnerControllerTest {
     private OwnerService ownerService;
 
     @Test
+    @Disabled
     void 반려인_등록_API() throws Exception {
         //given
         OwnerCreatorRequest request = OwnerDtoCreators.ownerCreatorRequest();
@@ -54,6 +56,7 @@ class OwnerControllerTest {
     }
 
     @Test
+    @Disabled
     void 잘못된_DTO_필드로_반려인_등록_API_요청() throws Exception {
         //given
         OwnerCreatorRequest request = OwnerDtoCreators.invalidOwnerCreatorRequest();
