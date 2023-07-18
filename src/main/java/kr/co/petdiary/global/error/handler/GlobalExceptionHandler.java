@@ -2,7 +2,7 @@ package kr.co.petdiary.global.error.handler;
 
 import kr.co.petdiary.global.error.exception.DuplicatedException;
 import kr.co.petdiary.global.error.exception.EntityNotFoundException;
-import kr.co.petdiary.global.error.exception.PasswordInvalidException;
+import kr.co.petdiary.global.error.exception.InvalidPasswordException;
 import kr.co.petdiary.global.error.model.ErrorResponse;
 import kr.co.petdiary.global.error.model.ErrorResult;
 import lombok.extern.slf4j.Slf4j;
@@ -26,8 +26,8 @@ public class GlobalExceptionHandler {
         return handleExceptionInternal(e.getErrorResult());
     }
 
-    @ExceptionHandler(PasswordInvalidException.class)
-    protected ResponseEntity<ErrorResponse> handlePasswordInvalidException(PasswordInvalidException e) {
+    @ExceptionHandler(InvalidPasswordException.class)
+    protected ResponseEntity<ErrorResponse> handlePasswordInvalidException(InvalidPasswordException e) {
         log.warn("======= Handle PasswordInvalidException =======", e);
         return handleExceptionInternal(e.getErrorResult());
     }

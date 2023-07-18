@@ -5,7 +5,7 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import kr.co.petdiary.global.common.BaseEntity;
 import kr.co.petdiary.global.common.Regexp;
-import kr.co.petdiary.global.error.exception.PasswordInvalidException;
+import kr.co.petdiary.global.error.exception.InvalidPasswordException;
 import kr.co.petdiary.global.error.model.ErrorResult;
 import kr.co.petdiary.owner.model.LoginType;
 import kr.co.petdiary.owner.model.Role;
@@ -79,7 +79,7 @@ public class Owner extends BaseEntity {
 
     public void validateEncodePasswordMatch(String password, PasswordEncoder passwordEncoder) {
         if (!passwordEncoder.matches(password, this.password)) {
-            throw new PasswordInvalidException(ErrorResult.INVALID_PASSWORD);
+            throw new InvalidPasswordException(ErrorResult.INVALID_PASSWORD);
         }
     }
 }

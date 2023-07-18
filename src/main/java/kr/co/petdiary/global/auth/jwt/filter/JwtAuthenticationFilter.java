@@ -1,14 +1,14 @@
-package kr.co.petdiary.global.jwt.filter;
+package kr.co.petdiary.global.auth.jwt.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.co.petdiary.global.auth.jwt.service.JwtService;
 import kr.co.petdiary.global.error.exception.EntityNotFoundException;
-import kr.co.petdiary.global.error.exception.JwtTokenExtractException;
-import kr.co.petdiary.global.error.exception.JwtTokenInvalidException;
+import kr.co.petdiary.global.error.exception.ExtractJwtTokenException;
+import kr.co.petdiary.global.error.exception.InvalidJwtTokenException;
 import kr.co.petdiary.global.error.model.ErrorResult;
-import kr.co.petdiary.global.jwt.service.JwtService;
 import kr.co.petdiary.global.util.PasswordUtil;
 import kr.co.petdiary.owner.entity.Owner;
 import kr.co.petdiary.owner.repository.OwnerSearchRepository;
@@ -57,10 +57,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                        FilterChain chain) throws ServletException, IOException {
         //request에서 액세스 토큰 추출
         final String accessToken = jwtService.extractAccessToken(request)
-                .orElseThrow(() -> new JwtTokenExtractException(ErrorResult.FAILURE_JWT_TOKEN_EXTRACTION));
+                .orElseThrow(() -> new ExtractJwtTokenException(ErrorResult.FAILURE_JWT_TOKEN_EXTRACTION));
         //유효한 토큰이면, 액세스 토큰에서 Email을 추출
         final String email = jwtService.extractEmailByAccessToken(accessToken)
-                .orElseThrow(() -> new JwtTokenInvalidException(ErrorResult.INVALID_JWT_CLAIMS));
+                .orElseThrow(() -> new InvalidJwtTokenException(ErrorResult.INVALID_JWT_CLAIMS));
         //SecurityContextHolder에 담는 메서드로 전달
         ownerSearchRepository.searchByEmail(email)
                 .ifPresentOrElse(this::generateAuthentication,

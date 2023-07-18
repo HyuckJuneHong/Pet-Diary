@@ -1,7 +1,7 @@
 package kr.co.petdiary.owner.application;
 
 import kr.co.petdiary.global.error.exception.DuplicatedException;
-import kr.co.petdiary.global.error.exception.PasswordInvalidException;
+import kr.co.petdiary.global.error.exception.InvalidPasswordException;
 import kr.co.petdiary.global.error.model.ErrorResult;
 import kr.co.petdiary.owner.dto.request.OwnerCreatorRequest;
 import kr.co.petdiary.owner.dto.response.OwnerCreatorResponse;
@@ -64,6 +64,6 @@ class OwnerServiceTest {
         //when, then
         assertThatThrownBy(() -> ownerService.createOwner(request))
                 .hasMessage(ErrorResult.INVALID_PASSWORD.getMessage())
-                .isInstanceOf(PasswordInvalidException.class);
+                .isInstanceOf(InvalidPasswordException.class);
     }
 }

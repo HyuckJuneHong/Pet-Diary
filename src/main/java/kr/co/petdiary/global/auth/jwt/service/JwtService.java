@@ -1,4 +1,4 @@
-package kr.co.petdiary.global.jwt.service;
+package kr.co.petdiary.global.auth.jwt.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
