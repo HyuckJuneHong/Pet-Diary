@@ -1,4 +1,4 @@
-package kr.co.petdiary.global.jwt.service;
+package kr.co.petdiary.global.auth.jwt.service;
 
 import kr.co.petdiary.global.error.exception.EntityNotFoundException;
 import kr.co.petdiary.global.error.model.ErrorResult;

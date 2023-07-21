@@ -1,13 +1,13 @@
-package kr.co.petdiary.global.jwt.filter;
+package kr.co.petdiary.global.auth.jwt.filter;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import kr.co.petdiary.global.auth.jwt.service.CustomLoginUserDetailsService;
+import kr.co.petdiary.global.auth.jwt.service.JwtService;
 import kr.co.petdiary.global.error.exception.InvalidJwtTokenException;
 import kr.co.petdiary.global.error.model.ErrorResult;
-import kr.co.petdiary.global.jwt.service.CustomLoginUserDetailsService;
-import kr.co.petdiary.global.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;

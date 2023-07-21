@@ -1,10 +1,10 @@
 package kr.co.petdiary.owner.application;
 
+import kr.co.petdiary.global.auth.jwt.service.JwtService;
 import kr.co.petdiary.global.error.exception.DuplicatedException;
 import kr.co.petdiary.global.error.exception.EntityNotFoundException;
 import kr.co.petdiary.global.error.exception.InvalidPasswordException;
 import kr.co.petdiary.global.error.model.ErrorResult;
-import kr.co.petdiary.global.jwt.service.JwtService;
 import kr.co.petdiary.owner.dto.request.OwnerCreatorRequest;
 import kr.co.petdiary.owner.dto.request.OwnerLoginRequest;
 import kr.co.petdiary.owner.dto.response.OwnerCreatorResponse;

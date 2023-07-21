@@ -1,8 +1,8 @@
 package kr.co.petdiary.global.config;
 
-import kr.co.petdiary.global.jwt.filter.JwtAuthenticationFilter;
-import kr.co.petdiary.global.jwt.service.CustomLoginUserDetailsService;
-import kr.co.petdiary.global.jwt.service.JwtService;
+import kr.co.petdiary.global.auth.jwt.filter.JwtAuthenticationFilter;
+import kr.co.petdiary.global.auth.jwt.service.CustomLoginUserDetailsService;
+import kr.co.petdiary.global.auth.jwt.service.JwtService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;

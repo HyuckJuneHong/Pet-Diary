@@ -1,4 +1,4 @@
-package kr.co.petdiary.global.jwt.service;
+package kr.co.petdiary.global.auth.jwt.service;
 
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
