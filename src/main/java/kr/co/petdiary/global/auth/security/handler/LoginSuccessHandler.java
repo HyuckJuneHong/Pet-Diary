@@ -8,6 +8,8 @@ import kr.co.petdiary.global.error.model.ErrorResult;
 import kr.co.petdiary.owner.entity.Owner;
 import kr.co.petdiary.owner.repository.OwnerRepository;
 import kr.co.petdiary.owner.repository.OwnerSearchRepository;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -17,7 +19,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
-@RequiredArgsConstructor
+@Builder
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
     @Value("${jwt.access.expire}")
     private long ACCESS_EXPIRE;
