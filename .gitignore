@@ -288,3 +288,4 @@ gradle-app.setting
 # Yaml
 /src/main/resources/application-mysql.yml
 /src/main/resources/application-jwt.yml
+/src/main/resources/application-test.yml
