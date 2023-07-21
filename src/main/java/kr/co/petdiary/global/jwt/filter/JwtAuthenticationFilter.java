@@ -4,7 +4,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import kr.co.petdiary.global.error.exception.ExtractJwtTokenException;
+import kr.co.petdiary.global.error.exception.InvalidJwtTokenException;
 import kr.co.petdiary.global.error.model.ErrorResult;
 import kr.co.petdiary.global.jwt.service.CustomLoginUserDetailsService;
 import kr.co.petdiary.global.jwt.service.JwtService;
@@ -35,7 +35,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             accessToken = jwtService.reissueAccessTokenByRefreshToken(response, refreshToken);
         } else {
             accessToken = jwtService.extractAccessToken(request)
-                    .orElseThrow(() -> new ExtractJwtTokenException(ErrorResult.FAILURE_JWT_TOKEN_EXTRACTION));
+                    .orElseThrow(() -> new InvalidJwtTokenException(ErrorResult.FAILURE_JWT_TOKEN_EXTRACTION));
         }
 
         generateAuthentication(accessToken);
@@ -44,7 +44,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private void generateAuthentication(String accessToken) {
         final String email = jwtService.extractEmailByAccessToken(accessToken)
-                .orElseThrow(() -> new ExtractJwtTokenException(ErrorResult.FAILURE_EMAIL_EXTRACTION));
+                .orElseThrow(() -> new InvalidJwtTokenException(ErrorResult.FAILURE_JWT_EMAIL_EXTRACTION));
         final UserDetails userDetails = loginUserDetailsService.loadUserByUsername(email);
         final Authentication authentication
                 = new UsernamePasswordAuthenticationToken(userDetails, "", userDetails.getAuthorities());

@@ -2,6 +2,7 @@ package kr.co.petdiary.global.error.handler;
 
 import kr.co.petdiary.global.error.exception.DuplicatedException;
 import kr.co.petdiary.global.error.exception.EntityNotFoundException;
+import kr.co.petdiary.global.error.exception.InvalidJwtTokenException;
 import kr.co.petdiary.global.error.exception.InvalidPasswordException;
 import kr.co.petdiary.global.error.model.ErrorResponse;
 import kr.co.petdiary.global.error.model.ErrorResult;
@@ -9,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
-
 
 @Slf4j
 @RestControllerAdvice
@@ -28,7 +28,13 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(InvalidPasswordException.class)
     protected ResponseEntity<ErrorResponse> handlePasswordInvalidException(InvalidPasswordException e) {
-        log.warn("======= Handle PasswordInvalidException =======", e);
+        log.warn("======= Handle InvalidPasswordException =======", e);
+        return handleExceptionInternal(e.getErrorResult());
+    }
+
+    @ExceptionHandler(InvalidJwtTokenException.class)
+    protected ResponseEntity<ErrorResponse> handleJwtTokenInvalidException(InvalidJwtTokenException e) {
+        log.warn("======= Handle InvalidJwtTokenException =======", e);
         return handleExceptionInternal(e.getErrorResult());
     }
 
