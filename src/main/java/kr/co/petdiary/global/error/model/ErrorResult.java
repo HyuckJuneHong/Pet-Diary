@@ -15,6 +15,7 @@ public enum ErrorResult {
     FAILURE_JWT_TOKEN_EXTRACTION("JWT Token 추출에 실패하였습니다.", HttpStatus.UNAUTHORIZED),
     INVALID_JWT_CLAIMS("JWT 토큰의 클레임이 유효하지 않습니다.", HttpStatus.BAD_REQUEST),
     FAILURE_LOGIN("이메일 혹은 비밀번호가 잘못되었습니다.", HttpStatus.BAD_REQUEST),
+    FAILURE_OAUTH_LOGIN("소셜 로그인이 실패하였습니다..", HttpStatus.BAD_REQUEST),
     ;
 
     private final String message;
