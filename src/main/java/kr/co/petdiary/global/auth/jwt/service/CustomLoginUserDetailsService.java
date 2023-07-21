@@ -1,5 +1,6 @@
 package kr.co.petdiary.global.auth.jwt.service;
 
+import kr.co.petdiary.global.auth.context.OwnerThreadLocal;
 import kr.co.petdiary.global.error.exception.EntityNotFoundException;
 import kr.co.petdiary.global.error.model.ErrorResult;
 import kr.co.petdiary.owner.entity.Owner;
@@ -20,7 +21,7 @@ public class CustomLoginUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
         final Owner owner = ownerSearchRepository.searchByEmail(email)
                 .orElseThrow(() -> new EntityNotFoundException(ErrorResult.NOT_FOUND_OWNER));
-
+        OwnerThreadLocal.setOwner(owner);
         return User.builder()
                 .username(owner.getEmail())
                 .password(owner.getPassword())
