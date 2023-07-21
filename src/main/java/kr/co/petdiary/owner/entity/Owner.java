@@ -7,7 +7,6 @@ import kr.co.petdiary.global.common.BaseEntity;
 import kr.co.petdiary.global.common.Regexp;
 import kr.co.petdiary.global.error.exception.InvalidPasswordException;
 import kr.co.petdiary.global.error.model.ErrorResult;
-import kr.co.petdiary.owner.model.LoginType;
 import kr.co.petdiary.owner.model.Role;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -32,41 +31,27 @@ public class Owner extends BaseEntity {
     private String name;
 
     @Pattern(regexp = Regexp.PHONE_PATTERN)
-    @Column(name = "cell_phone", length = 20, unique = true)
+    @Column(name = "cell_phone", length = 20, nullable = false, unique = true)
     private String cellPhone;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", length = 10, nullable = false)
     private Role role;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "login_type", length = 10)
-    private LoginType loginType;
-
-    @Column(name = "social_id")
-    private String socialId;
-
     @Column(name = "refresh_token")
     private String refreshToken;
 
     @Builder
-    private Owner(String email, String password, String name, String cellPhone, String socialId, LoginType loginType,
-                  Role role) {
+    private Owner(String email, String password, String name, String cellPhone, Role role) {
         this.email = email;
         this.password = password;
         this.name = name;
         this.cellPhone = cellPhone;
-        this.socialId = socialId;
-        this.loginType = loginType;
         this.role = role;
     }
 
     public String getRoleKey() {
         return this.getRole().getKey();
-    }
-
-    public void authorizeOwner() {
-        this.role = Role.USER;
     }
 
     public void updateRefreshToken(String refreshToken) {

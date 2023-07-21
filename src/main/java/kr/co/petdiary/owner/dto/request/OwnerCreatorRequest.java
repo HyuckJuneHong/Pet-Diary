@@ -5,6 +5,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import kr.co.petdiary.global.common.Regexp;
 import kr.co.petdiary.owner.entity.Owner;
+import kr.co.petdiary.owner.model.Role;
 import lombok.*;
 
 @Getter
@@ -33,6 +34,7 @@ public class OwnerCreatorRequest {
                 .name(this.name)
                 .password(this.password)
                 .cellPhone(this.cellPhone)
+                .role(Role.USER)
                 .build();
     }
 }

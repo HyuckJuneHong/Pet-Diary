@@ -54,13 +54,6 @@ public class SecurityConfig {
                 .anyRequest().authenticated()
         );
 
-//        //== 소셜 로그인 설정 ==//
-//        http.oauth2Login(oauth -> oauth
-//                .successHandler(oAuth2LoginSuccessHandler)
-//                .failureHandler(oAuth2LoginFailureHandler)
-//                .userInfoEndpoint(service -> service.userService(oAuth2UserService))
-//        );
-
         http.addFilterBefore(
                 new JwtAuthenticationFilter(jwtService, loginUserDetailsService),
                 UsernamePasswordAuthenticationFilter.class);

@@ -31,7 +31,6 @@ public class OwnerService {
         isEmail(request.getEmail());
         validatePasswordMatch(request.getPassword(), request.getCheckPassword());
         final Owner saveOwner = request.toOwner();
-        saveOwner.authorizeOwner();
         saveOwner.encodePassword(passwordEncoder);
         return OwnerCreatorResponse.toDto(ownerRepository.save(saveOwner));
     }

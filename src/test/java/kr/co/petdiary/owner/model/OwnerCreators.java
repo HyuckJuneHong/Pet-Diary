@@ -9,6 +9,7 @@ public class OwnerCreators {
                 .name("testName")
                 .password("testPassword")
                 .cellPhone("010-1233-1233")
+                .role(Role.USER)
                 .build();
     }
 
@@ -18,6 +19,7 @@ public class OwnerCreators {
                 .name("testName")
                 .password("testPassword")
                 .cellPhone(cellPhone)
+                .role(Role.USER)
                 .build();
     }
 
@@ -27,6 +29,7 @@ public class OwnerCreators {
                 .name("testName")
                 .password("testPassword")
                 .cellPhone("010-1234-5678")
+                .role(Role.USER)
                 .build();
     }
 }

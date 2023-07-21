@@ -7,7 +7,11 @@ import lombok.Builder;
 import java.time.LocalDateTime;
 
 @Builder
-public record OwnerCreatorResponse(Long ownerId, String name, LocalDateTime createAt) {
+public record OwnerCreatorResponse(
+        Long ownerId,
+        String name,
+        LocalDateTime createAt
+) {
     public static OwnerCreatorResponse toDto(Owner owner) {
         return OwnerCreatorResponse.builder()
                 .ownerId(owner.getId())

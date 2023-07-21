@@ -14,6 +14,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.context.ActiveProfiles;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -30,11 +31,15 @@ class OwnerServiceTest {
     @Mock
     private OwnerRepository ownerRepository;
 
+    @Mock
+    private PasswordEncoder passwordEncoder;
+
     @Test
     void 반려인_등록() {
         //given
         Owner owner = OwnerCreators.createOwner();
         given(ownerRepository.save(any(Owner.class))).willReturn(owner);
+        given(passwordEncoder.encode(any(String.class))).willReturn("encodedPassword");
         OwnerCreatorRequest request = OwnerDtoCreators.ownerCreatorRequest(owner);
 
         //when

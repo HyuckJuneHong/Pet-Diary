@@ -1,3 +1,14 @@
+jwt:
+  secretKey: test-secret-key
+
+  access:
+    expire: 600000
+    header: Authorization
+
+  refresh:
+    expire: 1209600000
+    header: Authorization-Refresh
+
 spring:
   h2:
     console:
