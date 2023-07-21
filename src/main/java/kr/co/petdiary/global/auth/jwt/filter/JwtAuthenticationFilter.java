@@ -12,6 +12,8 @@ import kr.co.petdiary.global.error.model.ErrorResult;
 import kr.co.petdiary.global.util.PasswordUtil;
 import kr.co.petdiary.owner.entity.Owner;
 import kr.co.petdiary.owner.repository.OwnerSearchRepository;
+import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -22,7 +24,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
-@RequiredArgsConstructor
+@Builder
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String LOGIN_API = "/api/v1/owners/sign-in";
 
