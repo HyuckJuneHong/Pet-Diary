@@ -1,4 +1,4 @@
-package kr.co.petdiary.global.auth.security.service;
+package kr.co.petdiary.global.jwt.service;
 
 import kr.co.petdiary.global.error.exception.EntityNotFoundException;
 import kr.co.petdiary.global.error.model.ErrorResult;
@@ -24,7 +24,7 @@ public class CustomLoginUserDetailsService implements UserDetailsService {
         return User.builder()
                 .username(owner.getEmail())
                 .password(owner.getPassword())
-                .roles(owner.getRoleKey())
+                .roles(owner.getRole().name())
                 .build();
     }
 }

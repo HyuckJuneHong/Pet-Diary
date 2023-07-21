@@ -22,29 +22,29 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @AttributeOverride(name = "id", column = @Column(name = "owner_id", length = 4))
 public class Owner extends BaseEntity {
     @Email
-    @Column(name = "email", length = 30, nullable = false, unique = true)
+    @Column(name = "email", length = 50, nullable = false, unique = true)
     private String email;
 
-    @Column(name = "password", length = 20, nullable = false)
+    @Column(name = "password", length = 100, nullable = false)
     private String password;
 
     @Column(name = "name", length = 20, nullable = false)
     private String name;
 
     @Pattern(regexp = Regexp.PHONE_PATTERN)
-    @Column(name = "cell_phone", length = 20, nullable = false, unique = true)
+    @Column(name = "cell_phone", length = 20, unique = true)
     private String cellPhone;
 
-    @Column(name = "social_id")
-    private String socialId;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "role", length = 10, nullable = false)
+    private Role role;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "login_type", length = 10)
     private LoginType loginType;
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "role", length = 10, nullable = false)
-    private Role role;
+    @Column(name = "social_id")
+    private String socialId;
 
     @Column(name = "refresh_token")
     private String refreshToken;
@@ -62,7 +62,7 @@ public class Owner extends BaseEntity {
     }
 
     public String getRoleKey() {
-        return this.role.getKey();
+        return this.getRole().getKey();
     }
 
     public void authorizeOwner() {

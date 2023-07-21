@@ -2,15 +2,14 @@ package kr.co.petdiary.owner.presentation;
 
 import kr.co.petdiary.owner.application.OwnerService;
 import kr.co.petdiary.owner.dto.request.OwnerCreatorRequest;
+import kr.co.petdiary.owner.dto.request.OwnerLoginRequest;
 import kr.co.petdiary.owner.dto.response.OwnerCreatorResponse;
+import kr.co.petdiary.owner.dto.response.OwnerLoginResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequiredArgsConstructor
@@ -18,10 +17,27 @@ import org.springframework.web.bind.annotation.RestController;
 public class OwnerController {
     private final OwnerService ownerService;
 
-    @PostMapping
+    @PostMapping("/register")
     public ResponseEntity<OwnerCreatorResponse> createOwner(@RequestBody @Validated OwnerCreatorRequest request) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(ownerService.createOwner(request));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<OwnerLoginResponse> loginOwner(@RequestBody @Validated OwnerLoginRequest request) {
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body(ownerService.loginOwner(request));
+    }
+
+    @PostMapping("/sign-up/oauth2")
+    public String createOAuthOwner() {
+        return "소셜 회원가입 추가 정보 입력";
+    }
+
+    @GetMapping
+    public String jwtTest() {
+        return "인가 테스트";
     }
 }
