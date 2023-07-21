@@ -18,7 +18,7 @@ public enum ErrorResult {
     INVALID_JWT_CLAIMS("JWT 토큰의 클레임이 유효하지 않습니다.", HttpStatus.UNAUTHORIZED),
     INVALID_JWT_TOKEN("JWT 토큰이 유효하지 않습니다.", HttpStatus.UNAUTHORIZED),
     MALFORMED_JWT_TOKEN("JWT가 올바르게 구성되지 않아서 거부되었습니다.", HttpStatus.UNAUTHORIZED),
-    EXPIRED_JWT_TOKEN("JWT가 만료된 후 수락되어 거부되었습니다.", HttpStatus.UNAUTHORIZED),
+    EXPIRED_JWT_TOKEN("JWT가 만료되어 수락이 거부되었습니다.", HttpStatus.UNAUTHORIZED),
     FAILURE_KEY_CONVERSION("키 변환을 실패하였습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     ;
 

@@ -1,6 +1,7 @@
 package kr.co.petdiary.owner.application;
 
 import kr.co.petdiary.global.auth.jwt.service.JwtService;
+import kr.co.petdiary.global.auth.jwt.service.RedisService;
 import kr.co.petdiary.global.error.exception.DuplicatedException;
 import kr.co.petdiary.global.error.exception.EntityNotFoundException;
 import kr.co.petdiary.global.error.exception.InvalidPasswordException;
@@ -23,8 +24,9 @@ import org.springframework.transaction.annotation.Transactional;
 public class OwnerService {
     private final OwnerRepository ownerRepository;
     private final OwnerSearchRepository ownerSearchRepository;
-    private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
+    private final RedisService redisService;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public OwnerCreatorResponse createOwner(OwnerCreatorRequest request) {
@@ -41,7 +43,7 @@ public class OwnerService {
                 .orElseThrow(() -> new EntityNotFoundException(ErrorResult.NOT_FOUND_OWNER));
         loginOwner.validateEncodePasswordMatch(request.getPassword(), passwordEncoder);
         final String[] tokens = generateToken(loginOwner);
-        loginOwner.updateRefreshToken(tokens[1]);
+        redisService.setRefreshTokenToRedis(tokens[1], loginOwner.getEmail());
         return OwnerLoginResponse.builder()
                 .accessToken(tokens[0])
                 .refreshToken(tokens[1])

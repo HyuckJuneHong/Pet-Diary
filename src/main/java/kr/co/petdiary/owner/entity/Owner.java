@@ -38,9 +38,6 @@ public class Owner extends BaseEntity {
     @Column(name = "role", length = 10, nullable = false)
     private Role role;
 
-    @Column(name = "refresh_token")
-    private String refreshToken;
-
     @Builder
     private Owner(String email, String password, String name, String cellPhone, Role role) {
         this.email = email;
@@ -52,10 +49,6 @@ public class Owner extends BaseEntity {
 
     public String getRoleKey() {
         return this.getRole().getKey();
-    }
-
-    public void updateRefreshToken(String refreshToken) {
-        this.refreshToken = refreshToken;
     }
 
     public void encodePassword(PasswordEncoder passwordEncoder) {

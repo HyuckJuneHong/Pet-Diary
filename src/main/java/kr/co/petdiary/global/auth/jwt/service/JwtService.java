@@ -5,12 +5,10 @@ import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import jakarta.transaction.Transactional;
-import kr.co.petdiary.global.error.exception.EntityNotFoundException;
+import kr.co.petdiary.global.error.exception.ExpiredJwtTokenException;
+import kr.co.petdiary.global.error.exception.InvalidJwtTokenException;
+import kr.co.petdiary.global.error.exception.MalformedJwtTokenException;
 import kr.co.petdiary.global.error.model.ErrorResult;
-import kr.co.petdiary.owner.entity.Owner;
-import kr.co.petdiary.owner.repository.OwnerRepository;
-import kr.co.petdiary.owner.repository.OwnerSearchRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -46,8 +44,7 @@ public class JwtService {
     @Value("${jwt.refresh.expire}")
     private long REFRESH_EXPIRE;
 
-    private final OwnerRepository ownerRepository;
-    private final OwnerSearchRepository ownerSearchRepository;
+    private final RedisService redisService;
 
     @PostConstruct
     protected void init() {
@@ -121,24 +118,24 @@ public class JwtService {
                     .get(EMAIL_CLAIM, String.class));
         } catch (MalformedJwtException e) {
             log.warn("======= Invalid JWT token =======", e.getMessage());
+            throw new MalformedJwtTokenException(ErrorResult.MALFORMED_JWT_TOKEN);
         } catch (ExpiredJwtException e) {
             log.warn("======= Expired JWT token =======", e.getMessage());
+            throw new ExpiredJwtTokenException(ErrorResult.EXPIRED_JWT_TOKEN);
         } catch (IllegalArgumentException e) {
             log.warn("======= Empty JWT Claims =======", e.getMessage());
+            throw new InvalidJwtTokenException(ErrorResult.INVALID_JWT_CLAIMS);
         } catch (Exception e) {
             log.warn("======= Not Valid Token =======", e.getMessage());
+            throw new InvalidJwtTokenException(ErrorResult.INVALID_JWT_TOKEN);
         }
-        return Optional.empty();
     }
 
-    @Transactional
     public String reissueAccessTokenByRefreshToken(HttpServletResponse response, String refreshToken) {
-        final Owner owner = ownerSearchRepository.searchByRefreshToken(refreshToken)
-                .orElseThrow(() -> new EntityNotFoundException(ErrorResult.NOT_FOUND_OWNER));
-        final String accessToken = createAccessToken(owner.getEmail());
-        final String reissueRefreshToken = reissueRefreshToken(owner);
-        owner.updateRefreshToken(reissueRefreshToken);
-        ownerRepository.save(owner);
+        final String email = redisService.getEmailByRefreshToken(refreshToken);
+        redisService.deleteRefreshToken(refreshToken);
+        final String accessToken = createAccessToken(email);
+        final String reissueRefreshToken = reissueRefreshToken(email);
         sendTokens(response, accessToken, reissueRefreshToken);
         return accessToken;
     }
@@ -150,11 +147,10 @@ public class JwtService {
         log.info("======= AccessToken and RefreshToken resend to Header =======");
     }
 
-    private String reissueRefreshToken(Owner owner) {
-        final String reIssueRefreshToken = createRefreshToken();
-        owner.updateRefreshToken(reIssueRefreshToken);
-        ownerRepository.save(owner);
-        return reIssueRefreshToken;
+    private String reissueRefreshToken(String email) {
+        final String reissueRefreshToken = createRefreshToken();
+        redisService.setRefreshTokenToRedis(reissueRefreshToken, email);
+        return reissueRefreshToken;
     }
 
     private Key generateKey() {

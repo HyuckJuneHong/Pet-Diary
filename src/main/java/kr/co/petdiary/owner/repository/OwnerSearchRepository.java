@@ -20,10 +20,4 @@ public class OwnerSearchRepository {
                 .where(DynamicQuery.generateEq(email, qOwner.email::eq))
                 .fetchOne());
     }
-
-    public Optional<Owner> searchByRefreshToken(String refreshToken) {
-        return Optional.ofNullable(queryFactory.selectFrom(qOwner)
-                .where(DynamicQuery.generateEq(refreshToken, qOwner.refreshToken::eq))
-                .fetchOne());
-    }
 }
