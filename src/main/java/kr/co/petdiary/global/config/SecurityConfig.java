@@ -3,6 +3,7 @@ package kr.co.petdiary.global.config;
 import kr.co.petdiary.global.auth.jwt.filter.JwtAuthenticationFilter;
 import kr.co.petdiary.global.auth.jwt.service.CustomLoginUserDetailsService;
 import kr.co.petdiary.global.auth.jwt.service.JwtService;
+import kr.co.petdiary.owner.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -51,6 +52,7 @@ public class SecurityConfig {
 
         //== URL별 권한 관리 설정 ==//
         http.authorizeHttpRequests(authorization -> authorization
+                .requestMatchers("/jwt-test").hasAnyRole(Role.ADMIN.name(), Role.USER.name())
                 .anyRequest().authenticated()
         );
 

@@ -31,12 +31,7 @@ public class OwnerController {
                 .body(ownerService.loginOwner(request));
     }
 
-    @PostMapping("/sign-up/oauth2")
-    public String createOAuthOwner() {
-        return "소셜 회원가입 추가 정보 입력";
-    }
-
-    @GetMapping
+    @GetMapping("/jwt-test")
     public String jwtTest() {
         return "인가 테스트";
     }
