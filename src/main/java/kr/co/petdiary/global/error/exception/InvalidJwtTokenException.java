@@ -11,4 +11,9 @@ public class InvalidJwtTokenException extends RuntimeException {
         super(errorResult.getMessage());
         this.errorResult = errorResult;
     }
+
+    public InvalidJwtTokenException(String message) {
+        super(message);
+        this.errorResult = null;
+    }
 }

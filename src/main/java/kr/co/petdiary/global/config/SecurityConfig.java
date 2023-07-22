@@ -1,10 +1,11 @@
 package kr.co.petdiary.global.config;
 
 import kr.co.petdiary.global.auth.jwt.filter.JwtAuthenticationFilter;
-import kr.co.petdiary.global.auth.jwt.service.CustomLoginUserDetailsService;
+import kr.co.petdiary.global.auth.jwt.service.CustomNullUserDetailsService;
 import kr.co.petdiary.global.auth.jwt.service.JwtService;
 import kr.co.petdiary.global.auth.jwt.service.RedisService;
 import kr.co.petdiary.owner.model.Role;
+import kr.co.petdiary.owner.repository.OwnerSearchRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -21,18 +22,17 @@ import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.HandlerExceptionResolver;
 
-/**
- * 인증은 CustomJsonUsernamePasswordAuthenticationFilter에서 authenticate()로 인증된 사용자로 처리
- * JwtAuthenticationProcessingFilter는 AccessToken, RefreshToken 재발급
- */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtService jwtService;
     private final RedisService redisService;
-    private final CustomLoginUserDetailsService loginUserDetailsService;
+    private final OwnerSearchRepository ownerSearchRepository;
+    private final HandlerExceptionResolver handlerExceptionResolver;
+    private final CustomNullUserDetailsService loginUserDetailsService;
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
@@ -59,15 +59,12 @@ public class SecurityConfig {
         );
 
         http.addFilterBefore(
-                new JwtAuthenticationFilter(jwtService, redisService, loginUserDetailsService),
+                new JwtAuthenticationFilter(jwtService, redisService, ownerSearchRepository, handlerExceptionResolver),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
 
-    /**
-     * 사용자화한 ProviderManager Bean 등록
-     */
     @Bean
     public AuthenticationManager authenticationManager() {
         final DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
