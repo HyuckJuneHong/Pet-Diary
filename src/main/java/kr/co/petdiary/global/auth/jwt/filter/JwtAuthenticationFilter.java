@@ -6,9 +6,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import kr.co.petdiary.global.auth.jwt.service.CustomLoginUserDetailsService;
 import kr.co.petdiary.global.auth.jwt.service.JwtService;
+import kr.co.petdiary.global.auth.jwt.service.RedisService;
+import kr.co.petdiary.global.error.exception.ExpiredJwtTokenException;
 import kr.co.petdiary.global.error.exception.InvalidJwtTokenException;
+import kr.co.petdiary.global.error.exception.MalformedJwtTokenException;
 import kr.co.petdiary.global.error.model.ErrorResult;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -20,26 +25,34 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
+    private final RedisService redisService;
     private final CustomLoginUserDetailsService loginUserDetailsService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
+        try {
+            final String accessToken;
+            final String refreshToken = jwtService.extractRefreshToken(request)
+                    .filter(jwtService::validateToken)
+                    .orElse(null);
 
-        final String accessToken;
-        final String refreshToken = jwtService.extractRefreshToken(request)
-                .filter(jwtService::validateToken)
-                .orElse(null);
+            if (refreshToken != null) {
+                accessToken = redisService.reissueAccessTokenByRefreshToken(response, refreshToken);
+            } else {
+                accessToken = jwtService.extractAccessToken(request)
+                        .orElseThrow(() -> new InvalidJwtTokenException(ErrorResult.FAILURE_JWT_TOKEN_EXTRACTION));
+            }
 
-        if (refreshToken != null) {
-            accessToken = jwtService.reissueAccessTokenByRefreshToken(response, refreshToken);
-        } else {
-            accessToken = jwtService.extractAccessToken(request)
-                    .orElseThrow(() -> new InvalidJwtTokenException(ErrorResult.FAILURE_JWT_TOKEN_EXTRACTION));
+            generateAuthentication(accessToken);
+            filterChain.doFilter(request, response);
+
+        } catch (ExpiredJwtTokenException | InvalidJwtTokenException | MalformedJwtTokenException e) {
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            response.setContentType(MediaType.APPLICATION_JSON_VALUE);
+            response.setCharacterEncoding("UTF-8");
+            response.getWriter().write("{\"message\":\"" + e.getMessage() + "\"}");
         }
-
-        generateAuthentication(accessToken);
-        filterChain.doFilter(request, response);
     }
 
     private void generateAuthentication(String accessToken) {

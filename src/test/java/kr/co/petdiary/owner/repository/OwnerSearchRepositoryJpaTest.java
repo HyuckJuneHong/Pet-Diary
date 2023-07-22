@@ -11,12 +11,14 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.context.annotation.Import;
 import org.springframework.test.context.ActiveProfiles;
 
+import java.util.Optional;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @ActiveProfiles("test")
 @Import({JPATestConfig.class, OwnerSearchRepository.class})
-class OwnerSearchRepositoryTest {
+class OwnerSearchRepositoryJpaTest {
     @Autowired
     private OwnerRepository ownerRepository;
 
@@ -29,7 +31,7 @@ class OwnerSearchRepositoryTest {
     }
 
     @Test
-    void 이메일이_존재하는지_검증() {
+    void 해당_이메일의_Owner_조회() {
         //given
         final Owner saveOwner = OwnerCreators.createOwner();
 
@@ -41,5 +43,17 @@ class OwnerSearchRepositoryTest {
         //then
         assertThat(actual.getId()).isNotNull();
         assertThat(actual.getEmail()).isEqualTo(saveOwner.getEmail());
+    }
+
+    @Test
+    void 해당_이메일의_Owner가_없음() {
+        //given
+        final Owner saveOwner = OwnerCreators.createOwner();
+
+        //when
+        final Optional<Owner> actual = ownerSearchRepository.searchByEmail(saveOwner.getEmail());
+
+        //then
+        assertThat(actual).isEmpty();
     }
 }

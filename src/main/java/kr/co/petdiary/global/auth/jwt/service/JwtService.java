@@ -4,12 +4,10 @@ import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import kr.co.petdiary.global.error.exception.ExpiredJwtTokenException;
 import kr.co.petdiary.global.error.exception.InvalidJwtTokenException;
 import kr.co.petdiary.global.error.exception.MalformedJwtTokenException;
 import kr.co.petdiary.global.error.model.ErrorResult;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,10 +17,10 @@ import java.security.Key;
 import java.util.Base64;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 @Slf4j
 @Service
-@RequiredArgsConstructor
 public class JwtService {
     private static final String ACCESS_TOKEN_SUBJECT = "AccessToken";
     private static final String REFRESH_TOKEN_SUBJECT = "RefreshToken";
@@ -44,8 +42,6 @@ public class JwtService {
     @Value("${jwt.refresh.expire}")
     private long REFRESH_EXPIRE;
 
-    private final RedisService redisService;
-
     @PostConstruct
     protected void init() {
         SECRET_KEY = Base64.getEncoder().encodeToString(SECRET_KEY.getBytes());
@@ -58,6 +54,7 @@ public class JwtService {
         return Jwts.builder()
                 .setSubject(ACCESS_TOKEN_SUBJECT)
                 .setClaims(generateClaims(email))
+                .setId(UUID.randomUUID().toString())
                 .setIssuedAt(issueDate)
                 .setExpiration(expireDate)
                 .signWith(generateKey(), SignatureAlgorithm.HS256)
@@ -70,6 +67,7 @@ public class JwtService {
 
         return Jwts.builder()
                 .setSubject(REFRESH_TOKEN_SUBJECT)
+                .setId(UUID.randomUUID().toString())
                 .setIssuedAt(issueDate)
                 .setExpiration(expireDate)
                 .signWith(generateKey(), SignatureAlgorithm.HS256)
@@ -129,28 +127,6 @@ public class JwtService {
             log.warn("======= Not Valid Token =======", e.getMessage());
             throw new InvalidJwtTokenException(ErrorResult.INVALID_JWT_TOKEN);
         }
-    }
-
-    public String reissueAccessTokenByRefreshToken(HttpServletResponse response, String refreshToken) {
-        final String email = redisService.getEmailByRefreshToken(refreshToken);
-        redisService.deleteRefreshToken(refreshToken);
-        final String accessToken = createAccessToken(email);
-        final String reissueRefreshToken = reissueRefreshToken(email);
-        sendTokens(response, accessToken, reissueRefreshToken);
-        return accessToken;
-    }
-
-    public void sendTokens(HttpServletResponse response, String accessToken, String refreshToken) {
-        response.setStatus(HttpServletResponse.SC_OK);
-        response.setHeader(ACCESS_HEADER, accessToken);
-        response.setHeader(REFRESH_HEADER, refreshToken);
-        log.info("======= AccessToken and RefreshToken resend to Header =======");
-    }
-
-    private String reissueRefreshToken(String email) {
-        final String reissueRefreshToken = createRefreshToken();
-        redisService.setRefreshTokenToRedis(reissueRefreshToken, email);
-        return reissueRefreshToken;
     }
 
     private Key generateKey() {

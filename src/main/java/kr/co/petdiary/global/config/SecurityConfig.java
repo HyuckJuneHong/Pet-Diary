@@ -3,6 +3,7 @@ package kr.co.petdiary.global.config;
 import kr.co.petdiary.global.auth.jwt.filter.JwtAuthenticationFilter;
 import kr.co.petdiary.global.auth.jwt.service.CustomLoginUserDetailsService;
 import kr.co.petdiary.global.auth.jwt.service.JwtService;
+import kr.co.petdiary.global.auth.jwt.service.RedisService;
 import kr.co.petdiary.owner.model.Role;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
@@ -30,6 +31,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtService jwtService;
+    private final RedisService redisService;
     private final CustomLoginUserDetailsService loginUserDetailsService;
 
     @Bean
@@ -57,7 +59,7 @@ public class SecurityConfig {
         );
 
         http.addFilterBefore(
-                new JwtAuthenticationFilter(jwtService, loginUserDetailsService),
+                new JwtAuthenticationFilter(jwtService, redisService, loginUserDetailsService),
                 UsernamePasswordAuthenticationFilter.class);
 
         return http.build();

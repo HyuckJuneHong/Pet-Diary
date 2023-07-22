@@ -1,9 +1,6 @@
 package kr.co.petdiary.global.error.handler;
 
-import kr.co.petdiary.global.error.exception.DuplicatedException;
-import kr.co.petdiary.global.error.exception.EntityNotFoundException;
-import kr.co.petdiary.global.error.exception.InvalidJwtTokenException;
-import kr.co.petdiary.global.error.exception.InvalidPasswordException;
+import kr.co.petdiary.global.error.exception.*;
 import kr.co.petdiary.global.error.model.ErrorResponse;
 import kr.co.petdiary.global.error.model.ErrorResult;
 import lombok.extern.slf4j.Slf4j;
@@ -32,9 +29,9 @@ public class GlobalExceptionHandler {
         return handleExceptionInternal(e.getErrorResult());
     }
 
-    @ExceptionHandler(InvalidJwtTokenException.class)
+    @ExceptionHandler({InvalidJwtTokenException.class, MalformedJwtTokenException.class, ExpiredJwtTokenException.class})
     protected ResponseEntity<ErrorResponse> handleJwtTokenInvalidException(InvalidJwtTokenException e) {
-        log.warn("======= Handle InvalidJwtTokenException =======", e);
+        log.warn("======= Handle JSON Web Token Exception =======", e);
         return handleExceptionInternal(e.getErrorResult());
     }
 

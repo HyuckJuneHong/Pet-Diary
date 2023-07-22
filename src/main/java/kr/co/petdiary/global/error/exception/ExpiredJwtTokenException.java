@@ -1,7 +1,9 @@
 package kr.co.petdiary.global.error.exception;
 
 import kr.co.petdiary.global.error.model.ErrorResult;
+import lombok.Getter;
 
+@Getter
 public class ExpiredJwtTokenException extends RuntimeException {
     private final ErrorResult errorResult;
 

@@ -14,7 +14,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 @DataJpaTest
 @ActiveProfiles("test")
 @Import(JPATestConfig.class)
-class OwnerRepositoryTest {
+class OwnerRepositoryJpaTest {
     @Autowired
     private OwnerRepository ownerRepository;
 
